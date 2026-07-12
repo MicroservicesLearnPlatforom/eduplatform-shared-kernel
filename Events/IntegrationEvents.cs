@@ -68,7 +68,7 @@ public record UserRegisteredIntegrationEvent(
 public record MessageSentIntegrationEvent(
     Guid MessageId,
     Guid ConversationId,
-    Guid SenderUserId,
-    List<Guid> RecipientUserIds,
+    Guid? SenderUserId,
+    IReadOnlyList<Guid> RecipientUserIds,
     string Preview,
     DateTime SentAt) : IntegrationEvent;
