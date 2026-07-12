@@ -58,12 +58,17 @@ public record QuizCreatedIntegrationEvent(
     Guid CreatorId,
     string Title) : IntegrationEvent;
 
-// Published by Identity.Service after a new user completes registration.
-// Profile.Service listens for this to create the base + role-specific profile automatically.
-// Role is passed as string to keep SharedKernel free of service-specific enums.
 public record UserRegisteredIntegrationEvent(
     Guid UserId,
     string DisplayName,
     string Role,
     DateOnly? DateOfBirth,
     string CountryCode) : IntegrationEvent;
+
+public record MessageSentIntegrationEvent(
+    Guid MessageId,
+    Guid ConversationId,
+    Guid SenderUserId,
+    List<Guid> RecipientUserIds,
+    string Preview,
+    DateTime SentAt) : IntegrationEvent;
