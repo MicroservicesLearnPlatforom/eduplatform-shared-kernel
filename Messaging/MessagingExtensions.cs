@@ -12,8 +12,12 @@ public static class MessagingExtensions
         IConfiguration configuration, 
         params Assembly[] assemblies)
     {
+         var serviceName = (Assembly.GetEntryAssembly()?.GetName().Name ?? "service")
+              .Replace(".API", "", StringComparison.OrdinalIgnoreCase)
+              .ToLowerInvariant();
         services.AddMassTransit(x =>
         {
+            x.SetEndpointNameFormatter(new DefaultEndpointNameFormatter($"{serviceName}-", false));
             foreach (var assembly in assemblies)
             {
                 x.AddConsumers(assembly);

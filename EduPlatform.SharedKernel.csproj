@@ -8,6 +8,8 @@
     <PackageId>EduPlatform.SharedKernel</PackageId>
     <Version>1.0.0</Version>
     <Description>Shared kernel for EduPlatform microservices</Description>
+    <RepositoryUrl>https://github.com/MicroservicesLearnPlatforom/eduplatform-shared-kernel</RepositoryUrl>
+    <Authors>EduPlatform</Authors>
   </PropertyGroup>
 
   <ItemGroup>
