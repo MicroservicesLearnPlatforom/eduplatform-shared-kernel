@@ -34,7 +34,10 @@ public record CoursePublishedIntegrationEvent(
 
 public record CourseSoftDeletedIntegrationEvent(Guid CourseId) : IntegrationEvent;
 
-public record CourseUnpublishedIntegrationEvent(Guid CourseId) : IntegrationEvent;
+public record CourseUnpublishedIntegrationEvent(
+    Guid CourseId,
+    Guid InstructorId,
+    string Title) : IntegrationEvent;
 
 public record LessonCompletedIntegrationEvent(
     Guid StudentId,
