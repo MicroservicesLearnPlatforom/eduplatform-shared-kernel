@@ -44,10 +44,19 @@ public record LessonCompletedIntegrationEvent(
     Guid CourseId,
     Guid LessonId) : IntegrationEvent;
 
+// EnrolledStudentIds: the lesson-service resolves the recipients (it can ask the course-service),
+// so consumers like the notification-service don't need to know about enrollments.
 public record LessonCreatedIntegrationEvent(
     Guid LessonId,
     Guid CourseId,
-    string Title) : IntegrationEvent;
+    string Title,
+    IReadOnlyList<Guid> EnrolledStudentIds) : IntegrationEvent;
+
+public record LessonPublishedIntegrationEvent(
+    Guid LessonId,
+    Guid CourseId,
+    string Title,
+    IReadOnlyList<Guid> EnrolledStudentIds) : IntegrationEvent;
 
 public record QuizCompletedIntegrationEvent(
     Guid StudentId,
@@ -59,7 +68,8 @@ public record QuizCreatedIntegrationEvent(
     Guid QuizId,
     Guid CourseId,
     Guid CreatorId,
-    string Title) : IntegrationEvent;
+    string Title,
+    IReadOnlyList<Guid> EnrolledStudentIds) : IntegrationEvent;
 
 public record UserRegisteredIntegrationEvent(
     Guid UserId,
