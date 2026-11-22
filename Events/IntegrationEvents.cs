@@ -261,3 +261,60 @@ public record RelationshipFrozenIntegrationEvent(
     Guid? CaseId,
     string Reason,
     DateTime FrozenAt) : IntegrationEvent;
+
+// ── Booking: private-lesson <-> appointment (A-01) ───────────
+// The appointment-service is the only owner of the calendar (slots + appointments).
+// The private-lesson-service owns requests, payment and the lesson itself and
+// keeps only the AppointmentId. Both sides talk through these events instead of HTTP.
+//
+//   private-lesson                         appointment
+//   LessonRequestAccepted     ───────────►  book the slot
+//                             ◄───────────  AppointmentBooked | AppointmentBookingFailed
+//   LessonRequestCancelled    ───────────►  cancel the appointment, free the slot
+//                             ◄───────────  AppointmentCancelled (also when cancelled in the calendar)
+
+// The teacher accepted a request: book TimeSlotId for the student.
+public record LessonRequestAcceptedIntegrationEvent(
+    Guid LessonRequestId,
+    Guid StudentId,
+    Guid TeacherId,
+    Guid TimeSlotId,
+    string? Notes) : IntegrationEvent;
+
+// A request was rejected or cancelled: cancel its appointment and free the slot.
+// AppointmentId can still be null if the AppointmentBooked answer has not arrived yet;
+// the appointment-service then finds the booking by TimeSlotId + StudentId.
+public record LessonRequestCancelledIntegrationEvent(
+    Guid LessonRequestId,
+    Guid StudentId,
+    Guid TeacherId,
+    Guid? TimeSlotId,
+    Guid? AppointmentId,
+    string Reason) : IntegrationEvent;
+
+// A slot was booked. LessonRequestId is set when the booking came from a private lesson,
+// null for a direct booking in the calendar.
+public record AppointmentBookedIntegrationEvent(
+    Guid AppointmentId,
+    Guid TimeSlotId,
+    Guid HostId,
+    Guid BookerId,
+    DateTime StartsAt,
+    DateTime EndsAt,
+    Guid? LessonRequestId) : IntegrationEvent;
+
+// The slot from LessonRequestAccepted could not be booked (taken meanwhile, deleted, ...).
+// The private-lesson-service has to cancel the request and refund the escrow.
+public record AppointmentBookingFailedIntegrationEvent(
+    Guid LessonRequestId,
+    Guid TimeSlotId,
+    string Reason) : IntegrationEvent;
+
+// An appointment was cancelled - by a LessonRequestCancelled event or directly in the calendar.
+public record AppointmentCancelledIntegrationEvent(
+    Guid AppointmentId,
+    Guid TimeSlotId,
+    Guid HostId,
+    Guid BookerId,
+    Guid? CancelledByUserId,
+    DateTime StartsAt) : IntegrationEvent;

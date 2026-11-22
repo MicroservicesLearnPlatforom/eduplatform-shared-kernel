@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackageId>EduPlatform.SharedKernel</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Description>Shared kernel for EduPlatform microservices</Description>
     <RepositoryUrl>https://github.com/MicroservicesLearnPlatforom/eduplatform-shared-kernel</RepositoryUrl>
     <Authors>EduPlatform</Authors>
