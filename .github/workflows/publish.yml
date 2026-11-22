@@ -26,6 +26,9 @@ jobs:
       - name: Build
         run: dotnet build EduPlatform.SharedKernel.csproj -c Release --no-restore -p:Version=${GITHUB_REF_NAME#v}
 
+      - name: Test
+        run: dotnet test tests/EduPlatform.SharedKernel.Tests -c Release
+
       - name: Pack
         run: dotnet pack EduPlatform.SharedKernel.csproj -c Release --no-build -p:Version=${GITHUB_REF_NAME#v} -o out
 
